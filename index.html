@@ -23,27 +23,39 @@
     </div>
 
 <script>
+    //Assumes that the element 'date' is an input field where users can select their birthdate
     let userInput = document.getElementById("date");
+    //Sets the maximum value that the user can enter in the 'date'
+    //Calculates today's date and format it as a string in the ISO format
+    //Takes only the date part(not the time) by splitting at the T
     userInput.max = new Date().toISOString().split("T")[0];
+    //Element used to display the calculated age
     let result = document.getElementById("result");
 
     function calculateAge(){
         let birthDate = new Date(userInput.value);
 
+        //Gets the user's birthdate from the input field
         let d1 = birthDate.getDate();
         let m1 = birthDate.getMonth() + 1;
         let y1 = birthDate.getFullYear();
 
         let today = new Date();
 
+        //Get today's date
         let d2 = today.getDate();
         let m2 = today.getMonth() + 1;
         let y2 = today.getFullYear();
 
         let d3, m3, y3;
 
+        //Calculate the difference in years between the birth year and the current year
         y3 = y2 - y1;
 
+        //Check if the current month is greater than or equal to the birth month
+        //If yes, it will simply substract the birth month and current month
+        //Else, it means the birhday hasn't occured yet then it will substract 1 from calculated years (y3)
+        //Also, it will calculate the difference in months by adding 12 to the current month and then substracting the birth month
         if(m2 >= m1){
             m3 = m2 - m1;
         } else{
@@ -51,6 +63,7 @@
             m3 = 12 + m2 - m1;
         }
 
+        //Similar logic in getting the birth month
         if(d2 >= d1){
             d3 = d2 - d1;
         } else{
@@ -58,14 +71,18 @@
             d3 = getDaysInMonth(y1, m1) + d2 - d1;
         }
 
+        //Checks if the calculated months is negative, if yes, it means that the birth month is later in the year than the current month
+        //It will substract 1 from the calculated years and set the calculated months to 11 (December)
         if(m3 < 0){
             m3 = 11;
             y3--;
         }
 
+        //Will display the result
         result.innerHTML = `You are <span>${y3}</span> years, <span>${m3}</span> months, and <span>${d3}</span> days old`;
     }
 
+    //Uses JS built-in 'Date' object to calculate the number of days in the specified month of the given year
     function getDaysInMonth(year, month){
         return new Date(year, month, 0).getDate();
     }
